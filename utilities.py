@@ -1,6 +1,8 @@
 import secrets
 import string
 import hashlib
+import psutil
+import platform
 
 def passwordgen(length=16):
     chars = string.ascii_letters + string.digits
@@ -91,3 +93,22 @@ def unitconv():
 
         else:
             print("  invalid option")
+
+def sysinfo():
+    osname = platform.system()
+    osver = platform.version()
+
+    ramTotal = round(psutil.virtual_memory().total / 1024**3)
+    ramAvail = round(psutil.virtual_memory().available / 1024**3)
+    
+    cpu = psutil.cpu_percent(interval = 1)
+
+    diskT = round(psutil.disk_usage('/').total / 1024**3, 2)
+    diskA = round(psutil.disk_usage('/').free / 1024**3, 2)
+
+    print("\n  -- SYSTEM INFO --")
+    print(f"  OS:          {osname} {osver[:22]}")
+    print(f"  RAM:         {ramAvail} GB free / {ramTotal} GB total")
+    print(f"  CPU:         {cpu}%")
+    print(f"  Disk:        {diskA} GB free / {diskT} GB total")
+

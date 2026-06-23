@@ -4,7 +4,7 @@ Pillow>=12.2.0          # Image converter (option 3)
 # --- Optional / future features ---
 # Uncomment a line when you actually start using the library.
 #
-# psutil>=5.9            # Disk/RAM usage, report space freed after cleanup, list processes
+psutil>=7.2.2           # Disk/RAM usage, report space freed after cleanup, list processes
 # colorama>=0.4.6        # Cross-platform colored terminal output for the menu
 # rich>=13.0             # Nicer tables/progress bars/menus in the terminal
 # pyperclip>=1.8         # Clipboard access without shelling out to PowerShell
