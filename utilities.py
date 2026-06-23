@@ -3,6 +3,12 @@ import string
 import hashlib
 import psutil
 import platform
+import os
+import qrcode
+import re
+import cryptography
+from cryptography.fernet import Fernet
+import base64
 
 def passwordgen(length=16):
     chars = string.ascii_letters + string.digits
@@ -112,3 +118,82 @@ def sysinfo():
     print(f"  CPU:         {cpu}%")
     print(f"  Disk:        {diskA} GB free / {diskT} GB total")
 
+def QRCgen():
+    qr = qrcode.QRCode()
+    data = input("Write the content of QRcode(URL, e.g., text): ")
+    qr.add_data(data)
+    qr.make(fit = True)
+    img = qr.make_image()
+    img.save("qrcode.png")
+    print("image was saved succesfully")
+
+def passwordCheck(password):
+    length_criteria = len(password) >= 8
+    uppercase_criteria = re.search(r'[A-Z]', password) is not None
+    lowercase_criteria = re.search(r'[a-z]', password) is not None
+    digit_criteria = re.search(r'\d', password) is not None
+    special_char_criteria = re.search(r'[!@#$%^&*()]', password) is not None
+    criteria_met = sum([length_criteria, uppercase_criteria, lowercase_criteria, digit_criteria, special_char_criteria])
+    if criteria_met == 5:
+        return "strong"
+    elif criteria_met == 4:
+        return "strong"
+    elif criteria_met == 3:
+        return "medium"
+    elif criteria_met == 2:
+        return "weak"
+    else:
+        return "weak"
+
+def vulnChk(file_path):
+    code = open(file_path).read()
+    issues = []
+
+    if "eval(" in code:
+        issues.append("eval() found - can execute arbitrary code")
+    if "exec(" in code:
+        issues.append("exec() found - ")
+    if "os.system(" in code:
+        issues.append("os.system() found - ")
+    if "subprocess" in code:
+        issues.append("subprocess found - ")
+    if "pickle.loads(" in code:
+        issues.append("pickle.loads found - ")
+    if not issues:
+        print("no vunerabilities found")
+    else:
+        for code in issues:
+            print(code)
+
+def encrypt():
+    while True:
+        print("\n  +---------------------------+")
+        print("  |     ENCRYPTION TOOL       |")
+        print("  +---------------------------+")
+        print("  |  [1]  Encrypt text        |")
+        print("  |  [2]  Decrypt text        |")
+        print("  |  [0]  Back to main menu   |")
+        print("  +---------------------------+")
+        choice = input("  > ").strip()
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            text = str(input("insert the text you want to encrypt: "))
+            key = str(input("insert the key: "))
+            key_bytes = hashlib.sha256(key.encode()).digest()
+            f_key = base64.urlsafe_b64encode(key_bytes)
+            f = Fernet(f_key)
+            text = f.encrypt(text.encode())
+            print(text.decode())
+        elif choice == "2":
+            text = str(input("insert the text you want to decrypt: "))
+            key = str(input("insert the key: "))
+            key_bytes = hashlib.sha256(key.encode()).digest()
+            f_key = base64.urlsafe_b64encode(key_bytes)
+            f = Fernet(f_key)
+            text = f.decrypt(text.encode())
+            print(text.decode())
+        else:
+            print("invalid option")
+    

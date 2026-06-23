@@ -1,5 +1,7 @@
 import os
-from utilities import passwordgen, hash_text, unitconv, sysinfo
+import qrcode
+import datetime
+from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt
 
 from PIL import Image
 
@@ -26,8 +28,15 @@ while True:
     print("|   [4]  Password generator".ljust(41) + "|")
     print("|   [5]  Hash / checksum a string".ljust(41) + "|")
     print("|   [6]  Unit converter".ljust(41) + "|")
+    print("|   [7]  QR code Generator".ljust(41) + "|")
+    print("|   [8]  View current date and time".ljust(41) + "|")
     print("|" + " " * 40 + "|")
-    print("|   [7]  System info".ljust(41) + "|")
+    print("|   [9]  System info".ljust(41) + "|")
+    print("|" + " " * 40 + "|")
+    print("|  SECURITY" + " " * 30 + "|")
+    print("|   [10] Password strenght test".ljust(41)+ "|")
+    print("|   [11] Python code vunerabilities check".ljust(41)+ "|")
+    print("|   [12] Encrypting".ljust(41)+ "|")
     print("|" + " " * 40 + "|")
     print("|   [0]  Exit ZeroG".ljust(41) + "|")
     print("|" + " " * 40 + "|")
@@ -37,7 +46,7 @@ while True:
     if opcao == "1":
         clear()
         print("Cleaning Temp files...")
-        os.system('del /q /f /s %TEMP%\\*')
+        os.system('del /q /f /s %TEMP%\*')
         print("Cleaning even more temp files...")
         os.system('del /q /f /s C:\\Windows\\Temp\\*')
         print("Cleaning Prefetch...")
@@ -52,7 +61,7 @@ while True:
     elif opcao == "3":
         clear()
         img_orig = input("Enter the image filename (e.g., image.png): ").strip().strip('"')
-        img_new = input("Enter the new format extension (e.g., jpg, bmp): ").strip().lstrip(".").lower()
+        img_new = input("Enter the new format extension (e.g., jpg, bmp): ").strip().lstrip('.').lower()
         if not os.path.isfile(img_orig):
             print("Error: file not found -> " + img_orig)
         else:
@@ -85,7 +94,31 @@ while True:
         pause()
     elif opcao == "7":
         clear()
+        QRCgen()
+        pause()
+    elif opcao == "8":
+        clear()
+        now = datetime.datetime.now()
+        print("Current date and time: " + now.strftime("%Y-%m-%d %H:%M:%S"))
+        pause()
+    elif opcao == "9":
+        clear()
         sysinfo()
+        pause()
+    elif opcao == "10":
+        clear()
+        password = input("Enter a password to check: ")
+        strenght = passwordCheck(password)
+        print(f"Password streght: {strenght}")
+        pause()
+    elif opcao == "11":
+        clear()
+        file_path = input("Write the python file path: ").strip()
+        vulnChk(file_path)
+        pause()
+    elif opcao == "12":
+        clear()
+        encrypt()
         pause()
     elif opcao == "0":
         clear()
