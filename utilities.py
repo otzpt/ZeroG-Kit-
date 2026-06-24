@@ -7,6 +7,7 @@ import os
 import qrcode
 import re
 import cryptography
+import socket
 from cryptography.fernet import Fernet
 import base64
 
@@ -128,7 +129,7 @@ def QRCgen():
     print("image was saved succesfully")
 
 def passwordCheck(password):
-    length_criteria = len(password) >= 8
+    length_criteria = len(password) >= 12
     uppercase_criteria = re.search(r'[A-Z]', password) is not None
     lowercase_criteria = re.search(r'[a-z]', password) is not None
     digit_criteria = re.search(r'\d', password) is not None
@@ -213,3 +214,30 @@ def firewallChk():
     else:
         print("OK: Remote Desktop port is closed")
     
+def networktools():
+    while True:
+        print("\n+----------------------------------+")
+        print("|         NETWORK TOOLS            |")
+        print("+----------------------------------+")
+        print("|  [1]  Ping host                  |")
+        print("|  [2]  View local / public IP     |")
+        print("|  [0]  Back to main menu          |")
+        print("+----------------------------------+")
+
+        option = input("choose one of the options above: ")
+
+        if option == "1":
+            host = input("Enter host: ")
+            os.system("ping -n 4 " + host)
+            input("press enter to continue...")
+        elif option == "2":
+            ipLocal = socket.gethostbyname(socket.gethostname())
+            print(f"ipLocal: {ipLocal}")
+            ipPublic = os.popen("curl ifconfig.me").read()
+            print(f"ipPublic: {ipPublic}")
+            input("oress enter to continue...")
+        elif option == "0":
+            break
+        else:
+            print("invalid option")
+

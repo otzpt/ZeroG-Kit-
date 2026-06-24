@@ -1,9 +1,16 @@
 import os
 import qrcode
 import datetime
-from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt, firewallChk
+from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt, firewallChk, networktools
 
 from PIL import Image
+
+import ctypes
+import sys
+
+if not ctypes.windll.shell32.IsUserAnAdmin():
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+    sys.exit()
 
 def clear():
     os.system('cls')
@@ -38,6 +45,10 @@ while True:
     print("|   [11] Python code vunerabilities check".ljust(41)+ "|")
     print("|   [12] Encrypting".ljust(41)+ "|")
     print("|   [13] FireWall config assistent".ljust(41)+ "|")
+    print("|" + " " * 40 + "|")
+    print("|  NETWORK" + " " * 30 + "|")
+    print("|" + " " * 40 + "|")
+    print("|   [14] Networktools".ljust(41)+ "|")
     print("|" + " " * 40 + "|")
     print("|   [0]  Exit ZeroG".ljust(41) + "|")
     print("|" + " " * 40 + "|")
@@ -124,6 +135,10 @@ while True:
     elif opcao == "13":
         clear()
         firewallChk()
+        pause()
+    elif opcao == "14":
+        clear()
+        networktools()
         pause()
     elif opcao == "0":
         clear()
