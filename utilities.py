@@ -196,4 +196,20 @@ def encrypt():
             print(text.decode())
         else:
             print("invalid option")
+
+def firewallChk():
+    check = os.popen("netsh advfirewall show allprofiles state").read()
+    print(check)
+
+    if "OFF" in check:
+        print("WARNING: Firewall is OFF in one or more profiles")
+    else:
+        print("OK: Firewall is ON in all profiles")
+
+    RemDesk = os.popen("netsh advfirewall firewall show rule dir=in action=allow protocol=tcp localport=3389").read()
+
+    if "Rule Name" in RemDesk:
+        print("WARNING: Remote Desktop (port 3389) is open")
+    else:
+        print("OK: Remote Desktop port is closed")
     

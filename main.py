@@ -1,7 +1,7 @@
 import os
 import qrcode
 import datetime
-from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt
+from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt, firewallChk
 
 from PIL import Image
 
@@ -37,6 +37,7 @@ while True:
     print("|   [10] Password strenght test".ljust(41)+ "|")
     print("|   [11] Python code vunerabilities check".ljust(41)+ "|")
     print("|   [12] Encrypting".ljust(41)+ "|")
+    print("|   [13] FireWall config assistent".ljust(41)+ "|")
     print("|" + " " * 40 + "|")
     print("|   [0]  Exit ZeroG".ljust(41) + "|")
     print("|" + " " * 40 + "|")
@@ -119,6 +120,10 @@ while True:
     elif opcao == "12":
         clear()
         encrypt()
+        pause()
+    elif opcao == "13":
+        clear()
+        firewallChk()
         pause()
     elif opcao == "0":
         clear()
