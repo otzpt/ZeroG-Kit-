@@ -221,6 +221,8 @@ def networktools():
         print("+----------------------------------+")
         print("|  [1]  Ping host                  |")
         print("|  [2]  View local / public IP     |")
+        print("|  [3]  Check if port is open      |")
+        print("|  [4]  Scan active IP's           |")
         print("|  [0]  Back to main menu          |")
         print("+----------------------------------+")
 
@@ -236,8 +238,34 @@ def networktools():
             ipPublic = os.popen("curl ifconfig.me").read()
             print(f"ipPublic: {ipPublic}")
             input("oress enter to continue...")
+        elif option == "3":
+            host = input("Enter host: ")
+            port = int(input("Enter port: "))
+            try:
+                socket.create_connection((host, port), timeout=3)
+                print(f"Port {port} is OPEN on {host}")
+            except:
+                print(f"Port {port} is CLOSED on {host}")
+            input("Press enter to continue...")
+        elif option == "4":
+            local = socket.gethostbyname(socket.gethostname())
+            prefix = local.rsplit(".", 1)[0]
+            active = []
+            print("Scanning network, please wait...")
+            print("this process might take a few minutes")
+            for i in range(1, 256):
+                ipList = prefix + "." + str(i)
+                result = os.popen("ping -n 1 -w 100 " + ipList).read()
+                if "Reply from" in result:
+                    active.append(ipList)
+
+            print("\nActive IPs:")
+            for ip in active:
+                print("  " + ip)
+            input("Press enter to continue...")
         elif option == "0":
             break
         else:
             print("invalid option")
+
 
