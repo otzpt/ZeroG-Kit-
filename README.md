@@ -25,6 +25,7 @@ Every tool in here was chosen because it solves something I actually do manually
 | 11 | Python Vulnerability Scanner | Quickly spot dangerous patterns in .py files |
 | 12 | Encryption Tool | AES encrypt/decrypt text with a custom key |
 | 13 | Firewall Assistant | Check if your firewall and RDP port are properly configured |
+| 14 | Network Tools | Ping hosts, view local/public IP, check open ports, scan active IPs |
 
 ## Install
 
@@ -35,9 +36,11 @@ pip install -r requirements.txt
 python main.py
 ```
 
+> Note: Run as administrator for full functionality (temp cleanup, firewall checks).
+
 ## Built with
 
-Python — `Pillow`, `psutil`, `qrcode`, `cryptography`, `hashlib`, `secrets`
+Python — `Pillow`, `psutil`, `qrcode`, `cryptography`, `hashlib`, `secrets`, `socket`
 
 ## What I learned
 
@@ -45,4 +48,6 @@ Python — `Pillow`, `psutil`, `qrcode`, `cryptography`, `hashlib`, `secrets`
 - Python's `cryptography` library and how AES encryption works
 - How to use `netsh` commands to check Windows firewall state
 - How to use `re` (regex) to scan code for unsafe patterns
+- How to use Python's `socket` module for network operations
+- How to scan a local network with ping and filter active hosts
 - Managing dependencies cleanly with `requirements.txt`
