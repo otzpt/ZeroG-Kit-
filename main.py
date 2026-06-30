@@ -1,23 +1,187 @@
 import os
-import qrcode
-import datetime
-from utilities import passwordgen, hash_text, unitconv, sysinfo, QRCgen, passwordCheck, vulnChk, encrypt, firewallChk, networktools
-
-from PIL import Image
-
 import ctypes
 import sys
+import datetime
+
+from utilities import sysinfo, image_converter, QRCgen, passwordgen, unitconv
+from security import hash_text, passwordCheck, vulnChk, encrypt, firewallChk
+from network import networktools
+from text_tools import base64_tool, json_formatter, textCaseConv, regex_tester
 
 if not ctypes.windll.shell32.IsUserAnAdmin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
     sys.exit()
 
+
 def clear():
     os.system('cls')
+
 
 def pause():
     input("\n  press Enter to go back...")
     clear()
+
+
+def header(title):
+    print("+" + "-" * 40 + "+")
+    print("|" + title.center(40) + "|")
+    print("+" + "-" * 40 + "+")
+
+
+def system_menu():
+    while True:
+        clear()
+        header("SYSTEM TOOLS")
+        print("|   [1]  Clean Temp & Prefetch".ljust(41) + "|")
+        print("|   [2]  View Clipboard".ljust(41) + "|")
+        print("|   [3]  System Info".ljust(41) + "|")
+        print("|   [0]  Back".ljust(41) + "|")
+        print("+" + "-" * 40 + "+")
+        choice = input(" > ").strip()
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            clear()
+            print("  Cleaning Temp files...")
+            os.system('del /q /f /s %TEMP%\\*')
+            print("  Cleaning Windows Temp...")
+            os.system('del /q /f /s C:\\Windows\\Temp\\*')
+            print("  Cleaning Prefetch...")
+            os.system('del /q /f /s C:\\Windows\\Prefetch\\*')
+            print("\n  Done!")
+            pause()
+        elif choice == "2":
+            clear()
+            print("  -- CLIPBOARD --\n")
+            os.system('powershell Get-Clipboard')
+            pause()
+        elif choice == "3":
+            clear()
+            sysinfo()
+            pause()
+        else:
+            print("  invalid option")
+            pause()
+
+
+def utilities_menu():
+    while True:
+        clear()
+        header("UTILITIES")
+        print("|   [1]  Image Converter".ljust(41) + "|")
+        print("|   [2]  QR Code Generator".ljust(41) + "|")
+        print("|   [3]  Unit Converter".ljust(41) + "|")
+        print("|   [4]  Password Generator".ljust(41) + "|")
+        print("|   [5]  Date & Time".ljust(41) + "|")
+        print("|   [0]  Back".ljust(41) + "|")
+        print("+" + "-" * 40 + "+")
+        choice = input(" > ").strip()
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            clear()
+            image_converter()
+            pause()
+        elif choice == "2":
+            clear()
+            QRCgen()
+            pause()
+        elif choice == "3":
+            clear()
+            unitconv()
+        elif choice == "4":
+            clear()
+            length_input = input("  Password length (Enter for 16): ").strip()
+            length = int(length_input) if length_input.isdigit() else 16
+            print("  Generated: " + passwordgen(length))
+            pause()
+        elif choice == "5":
+            clear()
+            now = datetime.datetime.now()
+            print("  Date:  " + now.strftime("%Y-%m-%d"))
+            print("  Time:  " + now.strftime("%H:%M:%S"))
+            pause()
+        else:
+            print("  invalid option")
+            pause()
+
+
+def security_menu():
+    while True:
+        clear()
+        header("SECURITY")
+        print("|   [1]  Password Strength Check".ljust(41) + "|")
+        print("|   [2]  Hash / SHA-256".ljust(41) + "|")
+        print("|   [3]  Encrypt / Decrypt".ljust(41) + "|")
+        print("|   [4]  Python Vuln. Check".ljust(41) + "|")
+        print("|   [5]  Firewall Check".ljust(41) + "|")
+        print("|   [0]  Back".ljust(41) + "|")
+        print("+" + "-" * 40 + "+")
+        choice = input(" > ").strip()
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            clear()
+            password = input("  Password to check: ")
+            print("  Strength: " + passwordCheck(password))
+            pause()
+        elif choice == "2":
+            clear()
+            text = input("  Text to hash: ")
+            print("  SHA-256: " + hash_text(text))
+            pause()
+        elif choice == "3":
+            clear()
+            encrypt()
+        elif choice == "4":
+            clear()
+            file_path = input("  Python file path: ").strip().strip('"')
+            vulnChk(file_path)
+            pause()
+        elif choice == "5":
+            clear()
+            firewallChk()
+            pause()
+        else:
+            print("  invalid option")
+            pause()
+
+
+def text_menu():
+    while True:
+        clear()
+        header("TEXT & DATA")
+        print("|   [1]  Base64 Tool".ljust(41) + "|")
+        print("|   [2]  JSON Formatter".ljust(41) + "|")
+        print("|   [3]  Case Converter".ljust(41) + "|")
+        print("|   [4]  Regex Tester".ljust(41) + "|")
+        print("|   [0]  Back".ljust(41) + "|")
+        print("+" + "-" * 40 + "+")
+        choice = input(" > ").strip()
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            clear()
+            base64_tool()
+        elif choice == "2":
+            clear()
+            json_formatter()
+            pause()
+        elif choice == "3":
+            clear()
+            textCaseConv()
+        elif choice == "4":
+            clear()
+            regex_tester()
+            pause()
+        else:
+            print("  invalid option")
+            pause()
+
 
 while True:
     clear()
@@ -26,123 +190,31 @@ while True:
     print("|" + "your pocket toolbox".center(40) + "|")
     print("+" + "-" * 40 + "+")
     print("|" + " " * 40 + "|")
-    print("|  SYSTEM" + " " * 32 + "|")
-    print("|   [1]  Clean Temp & Prefetch files".ljust(41) + "|")
-    print("|   [2]  View clipboard history".ljust(41) + "|")
-    print("|   [3]  Image converter".ljust(41) + "|")
-    print("|" + " " * 40 + "|")
-    print("|  UTILITIES" + " " * 29 + "|")
-    print("|   [4]  Password generator".ljust(41) + "|")
-    print("|   [5]  Hash / checksum a string".ljust(41) + "|")
-    print("|   [6]  Unit converter".ljust(41) + "|")
-    print("|   [7]  QR code Generator".ljust(41) + "|")
-    print("|   [8]  View current date and time".ljust(41) + "|")
-    print("|" + " " * 40 + "|")
-    print("|   [9]  System info".ljust(41) + "|")
-    print("|" + " " * 40 + "|")
-    print("|  SECURITY" + " " * 30 + "|")
-    print("|   [10] Password strenght test".ljust(41)+ "|")
-    print("|   [11] Python code vunerabilities check".ljust(41)+ "|")
-    print("|   [12] Encrypting".ljust(41)+ "|")
-    print("|   [13] FireWall config assistent".ljust(41)+ "|")
-    print("|" + " " * 40 + "|")
-    print("|  NETWORK" + " " * 30 + "|")
-    print("|" + " " * 40 + "|")
-    print("|   [14] Networktools".ljust(41)+ "|")
+    print("|   [1]  System Tools".ljust(41) + "|")
+    print("|   [2]  Utilities".ljust(41) + "|")
+    print("|   [3]  Security".ljust(41) + "|")
+    print("|   [4]  Network".ljust(41) + "|")
+    print("|   [5]  Text & Data".ljust(41) + "|")
     print("|" + " " * 40 + "|")
     print("|   [0]  Exit ZeroG".ljust(41) + "|")
     print("|" + " " * 40 + "|")
     print("+" + "-" * 40 + "+")
-    opcao = input(" > choose an option: ")
+    opcao = input(" > choose a category: ").strip()
 
     if opcao == "1":
-        clear()
-        print("Cleaning Temp files...")
-        os.system('del /q /f /s %TEMP%\*')
-        print("Cleaning even more temp files...")
-        os.system('del /q /f /s C:\\Windows\\Temp\\*')
-        print("Cleaning Prefetch...")
-        os.system('del /q /f /s C:\\Windows\\Prefetch\\*')
-        print("\nDone! All temp files cleared.")
-        pause()
+        system_menu()
     elif opcao == "2":
-        clear()
-        print("  -- CLIPBOARD HISTORY --\n")
-        os.system('powershell Get-Clipboard')
-        pause()
+        utilities_menu()
     elif opcao == "3":
-        clear()
-        img_orig = input("Enter the image filename (e.g., image.png): ").strip().strip('"')
-        img_new = input("Enter the new format extension (e.g., jpg, bmp): ").strip().lstrip('.').lower()
-        if not os.path.isfile(img_orig):
-            print("Error: file not found -> " + img_orig)
-        else:
-            print("Converting " + img_orig + "...")
-            try:
-                with Image.open(img_orig) as img:
-                    if img_new in ("jpg", "jpeg") and img.mode in ("RGBA", "LA", "P"):
-                        img = img.convert("RGB")
-                    base = os.path.splitext(os.path.basename(img_orig))[0]
-                    out_name = base + "_converted." + img_new
-                    img.save(out_name)
-                print("Done! Saved as " + out_name)
-            except Exception as e:
-                print("Conversion failed: " + str(e))
-        pause()
+        security_menu()
     elif opcao == "4":
         clear()
-        length_input = input("Password length (press Enter for 16): ").strip()
-        length = int(length_input) if length_input.isdigit() else 16
-        print("Generated password: " + passwordgen(length))
-        pause()
-    elif opcao == "5":
-        clear()
-        text = input("Enter text to hash: ")
-        print("SHA-256: " + hash_text(text))
-        pause()
-    elif opcao == "6":
-        clear()
-        unitconv()
-        pause()
-    elif opcao == "7":
-        clear()
-        QRCgen()
-        pause()
-    elif opcao == "8":
-        clear()
-        now = datetime.datetime.now()
-        print("Current date and time: " + now.strftime("%Y-%m-%d %H:%M:%S"))
-        pause()
-    elif opcao == "9":
-        clear()
-        sysinfo()
-        pause()
-    elif opcao == "10":
-        clear()
-        password = input("Enter a password to check: ")
-        strenght = passwordCheck(password)
-        print(f"Password streght: {strenght}")
-        pause()
-    elif opcao == "11":
-        clear()
-        file_path = input("Write the python file path: ").strip()
-        vulnChk(file_path)
-        pause()
-    elif opcao == "12":
-        clear()
-        encrypt()
-        pause()
-    elif opcao == "13":
-        clear()
-        firewallChk()
-        pause()
-    elif opcao == "14":
-        clear()
         networktools()
-        pause()
+    elif opcao == "5":
+        text_menu()
     elif opcao == "0":
         clear()
-        print("Goodbye")
+        print("  Goodbye")
         break
     else:
         print("  invalid option")
