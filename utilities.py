@@ -134,3 +134,25 @@ def unitconv():
                 print("  invalid option")
         else:
             print("  invalid option")
+
+def processK():
+    process_list = [p.info for p in psutil.process_iter(['pid', 'name', 'memory_percent'])]
+    process_list_ordenada = sorted(process_list, key=lambda x: x['memory_percent'], reverse=True)
+    for p in process_list_ordenada[:30]:
+        print(f"{p['pid']:8} {p['name']:20} {p['memory_percent']:5.1f}%")
+
+def kill_process(name):
+    killed = []
+    for proc in psutil.process_iter(['pid', 'name']):
+        if proc.info['name'].lower() == name.lower():
+            try:
+                psutil.Process(proc.info['pid']).terminate()
+                killed.append(proc.info['pid'])
+            except psutil.NoSuchProcess:
+                pass
+            except psutil.AccessDenied:
+                print(f"  Access denied for PID {proc.info['pid']}")
+    if killed:
+        print(f"  Killed PIDs: {killed}")
+    else:
+        print("  No matching process found")

@@ -3,10 +3,10 @@ import ctypes
 import sys
 import datetime
 
-from utilities import sysinfo, image_converter, QRCgen, passwordgen, unitconv
+from utilities import sysinfo, image_converter, QRCgen, passwordgen, unitconv, kill_process, processK
 from security import hash_text, passwordCheck, vulnChk, encrypt, firewallChk
 from network import networktools
-from text_tools import base64_tool, json_formatter, textCaseConv, regex_tester
+from text_tools import base64_tool, json_formatter, textCaseConv, regex_tester, LIG
 
 if not ctypes.windll.shell32.IsUserAnAdmin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
@@ -35,6 +35,7 @@ def system_menu():
         print("|   [1]  Clean Temp & Prefetch".ljust(41) + "|")
         print("|   [2]  View Clipboard".ljust(41) + "|")
         print("|   [3]  System Info".ljust(41) + "|")
+        print("|   [4]  Process killer".ljust(41) + "|")
         print("|   [0]  Back".ljust(41) + "|")
         print("+" + "-" * 40 + "+")
         choice = input(" > ").strip()
@@ -59,6 +60,12 @@ def system_menu():
         elif choice == "3":
             clear()
             sysinfo()
+            pause()
+        elif choice == "4":
+            clear()
+            processK()
+            name = input("write process name here: ")
+            kill_process(name)
             pause()
         else:
             print("  invalid option")
@@ -158,6 +165,7 @@ def text_menu():
         print("|   [2]  JSON Formatter".ljust(41) + "|")
         print("|   [3]  Case Converter".ljust(41) + "|")
         print("|   [4]  Regex Tester".ljust(41) + "|")
+        print("|   [5]  Lorem Ipsun Generator".ljust(41) + "|")
         print("|   [0]  Back".ljust(41) + "|")
         print("+" + "-" * 40 + "+")
         choice = input(" > ").strip()
@@ -167,6 +175,7 @@ def text_menu():
         elif choice == "1":
             clear()
             base64_tool()
+            pause()
         elif choice == "2":
             clear()
             json_formatter()
@@ -174,9 +183,14 @@ def text_menu():
         elif choice == "3":
             clear()
             textCaseConv()
+            pause()
         elif choice == "4":
             clear()
             regex_tester()
+            pause()
+        elif choice == "5":
+            clear()
+            LIG()
             pause()
         else:
             print("  invalid option")
